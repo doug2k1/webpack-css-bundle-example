@@ -1,4 +1,4 @@
-# webpack-css-components
+# webpack-css-bundle-example
 
 ## Component A
 
