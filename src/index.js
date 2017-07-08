@@ -1,5 +1,4 @@
-import './index.css';
+import './index.scss';
 import ComponentA from './component-a';
 
-const myA = new ComponentA();
-myA.render();
+ComponentA();

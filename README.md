@@ -1,59 +1,67 @@
 # webpack-css-bundle-example
+> Transform SASS and bundle the base style + styles from used components.
 
 ## Component A
 
 JS
 ```javascript
-import './component-a.css';
+import './component-a.scss';
   
-class ComponentA {
-  render () {
-    console.log('A');
-  }
+export default function ComponentA() {
+  console.log('A');
 }
-  
-export default ComponentA;
+
 ```
 
 CSS
-```css
-.a { color: red; }
+```scss
+@import 'vars';
+  
+.a { color: $main-color; }
 ```
 
 ## Component B
 
 JS
 ```javascript
-import './component-b.css';
+import './component-b.scss';
   
-class ComponentB {
-  render () {
-    console.log('B');
-  }
+export default function ComponentB() {
+  console.log('B');
 }
-  
-export default ComponentB;
+
 ```
 
 CSS
-```css
-.b { color: blue; }
+```scss
+@import 'vars';
+  
+.b { color: $secondary-color; }
+
 ```
 
 ## Index (entrypoint)
 
 JS
 ```javascript
-import './index.css';
+import './index.scss';
 import ComponentA from './component-a';
   
-const myA = new ComponentA();
-myA.render();
+ComponentA();
 ```
 
-CSS
-```css
-body { margin: 0; }
+CSS (index.scss)
+```scss
+@import 'vars';
+  
+body { font-family: $base-font; }
+```
+
+CSS (_vars.scss)
+```scss
+$main-color: red;
+$secondary-color: blue;
+$base-font: 'Roboto', sans-serif;
 ```
 
 ## Webpack config
@@ -61,7 +69,7 @@ body { margin: 0; }
 ```javascript
 const path = require('path');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
-  
+
 module.exports = {
   entry: './src/index.js',
   output: {
@@ -70,19 +78,10 @@ module.exports = {
   },
   module: {
     rules: [{
-      test: /\.js$/,
-      exclude: /(node_modules|bower_components)/,
-      use: {
-        loader: 'babel-loader',
-        options: {
-          presets: ['env']
-        }
-      }
-    }, {
-      test: /\.css$/,
+      test: /\.scss$/,
       use: ExtractTextPlugin.extract({
         fallback: 'style-loader',
-        use: 'css-loader'
+        use: ['css-loader', 'sass-loader']
       })
     }]
   },
@@ -95,7 +94,8 @@ module.exports = {
 ## Result (bundle)
 
 CSS
+(Component B styles are not present)
 ```css
-body { margin: 0; }
+body { font-family: "Roboto", sans-serif; }
 .a { color: red; }
 ```

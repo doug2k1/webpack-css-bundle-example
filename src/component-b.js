@@ -1,9 +1,5 @@
-import './component-b.css';
+import './component-b.scss';
 
-class ComponentB {
-  render () {
-    console.log('B');
-  }
+export default function ComponentB() {
+  console.log('B');
 }
-
-export default ComponentB;
